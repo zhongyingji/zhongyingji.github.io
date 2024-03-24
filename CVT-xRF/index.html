@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<title>CVT-xRF</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <base href="/"> -->
+
+        <!--FACEBOOK-->
+    <meta property="og:image" content="https://zhongyingji.github.io/CVT-xRF/imgs/teaser.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="682">
+    <meta property="og:image:height" content="682">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://zhongyingji.github.io/CVT-xRF"/>
+    <meta property="og:title" content="CVT-xRF" />
+    <meta property="og:description" content="Project page for CVT-xRF: Contrastive In-Voxel Transformer for 3D Consistent Radiance Fields from Sparse Inputs" />
+
+        <!--TWITTER-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CVT-xRF" />
+    <meta name="twitter:description" content="Project page for CVT-xRF: Contrastive In-Voxel Transformer for 3D Consistent Radiance Fields from Sparse Inputs" />
+    <meta name="twitter:image" content="https://zhongyingji.github.io/CVT-xRF/imgs/teaser.png" />
+
+
+<!--     <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+  <!-- <link rel="icon" type="image/png" href="img/seal_icon.png"> -->
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+    
+    <script src="js/app.js"></script>
+    <style>
+        .video-container-2col {
+          display: flex;
+          justify-content: space-between;
+        }
+        .video-container-2col video {
+          margin-right: 6px;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          padding: 1px;
+        }
+        
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .video-container video {
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            padding: 1px;
+            margin: 1px auto;
+        }
+
+        .separator-container {
+            display: flex;
+            justify-content: center;
+        }
+        .separator {
+            border-top: 1px dashed #00000026;
+            width: 65%;
+            margin: 15px 0;
+        }
+
+    </style>
+    
+    
+</head>
+
+<body>
+    <div class="container" id="main">
+        <div class="row">
+            <h2 class="col-md-12 text-center">
+                <!-- <b>GBi-Net</b>: A Multiscale Representation <br> for Anti-Aliasing Neural Radiance Fields</br>  -->
+                CVT-xRF: Contrastive In-Voxel Transformer for 3D Consistent <br> Radiance Fields from Sparse Inputs</br>
+                <small>
+                    CVPR 2024
+                </small>
+            </h2>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="list-inline">
+                    <li>
+                        <a href="https://zhongyingji.github.io/">
+                          <sup>1</sup>Yingji Zhong
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://scholar.google.com.hk/citations?user=2p7x6OUAAAAJ&hl=zh-CN/">
+                            <sup>2</sup>Lanqing Hong
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://scholar.google.com/citations?user=XboZC1AAAAAJ&hl=en/">
+                            <sup>2</sup>Zhenguo Li
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.danxurgb.net/">
+                            <sup>1</sup>Dan Xu
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-12 text-center">
+                <ul class="list-inline">
+                    <li>
+                        <sup>1</sup>HKUST
+                    </li>
+                    <li>
+                        <sup>2</sup>Huawei Noah's Ark Lab
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+                <div class="col-md-4 col-md-offset-4 text-center">
+                    <ul class="nav nav-pills nav-justified">
+                        <li>
+                            <a href="https://zhongyingji.github.io/CVT-xRF/">
+                            <image src="imgs/cvt_paper.png" height="40px">
+                                <h4><strong>Paper</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/zhongyingji/CVT-xRF">
+                            <image src="imgs/github.png" height="40px">
+                                <h4><strong>Code</strong></h4>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <image src="imgs/teaser.png" class="img-responsive" alt="overview"><br>
+                    Illustration of learned 3D radiance fields and rendered images of the proposed CVT (<b>C</b>ontrastive In-<b>V</b>oxel
+                    <b>T</b>ransformer)-xRF upon three baselines trained from sparse inputs of three views. The `xRF` means that the proposed CVT
+                    module can be plugged into different baselines. The radiance fields of the three baselines show different levels of 3D inconsistencies (marked in red boxes), 
+                    which result in failures or artifacts in rendered images. With CVT, we can obtain radiance fields of better 3D consistency and render images of much higher quality.
+            </div>
+        </div>
+        
+        <div class="separator-container">
+            <div class="separator"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Abstract
+                </h3>
+                <!-- <image src="img/gbinet_pipeline.png" class="img-responsive" alt="overview"><br> -->
+                <p class="text-justify"> Neural Radiance Fields (NeRF) have shown impressive
+                    capabilities for photorealistic novel view synthesis when
+                    trained on dense inputs. However, when trained on sparse
+                    inputs, NeRF typically encounters issues of incorrect density
+                    or color predictions, mainly due to insufficient coverage
+                    of the scene causing sparse supervision, leading to 
+                    significant performance degradation. While existing
+                    works mainly consider ray-level consistency to construct
+                    2D learning regularization based on rendered color,
+                    depth, or semantics on image planes, in this paper we propose
+                    a novel approach that models 3D spatial field consistency
+                    to improve NeRF’s performance with sparse inputs.
+                    Specifically, we first adopt a voxel-based ray sampling strategy
+                    to ensure that the sampled rays intersect with a certain
+                    voxel in 3D space. We then randomly sample additional
+                    points within the voxel and apply a Transformer to infer
+                    the properties of other points on each ray, which are then
+                    incorporated into the volume rendering. By backpropagating
+                    through the rendering loss, we enhance the consistency among neighboring points. Additionally, we propose to use
+                    a contrastive loss on the encoder output of the Transformer
+                    to further improve consistency within each voxel. Experiments
+                    demonstrate that our method yields significant improvement
+                    over different radiance fields in the sparse inputs
+                    setting, and achieves comparable performance with current
+                    works.
+                </p>
+            </div>
+        </div>
+
+        <div class="separator-container">
+            <div class="separator"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Framework
+                </h3>
+                <image src="imgs/cvt_framework.png" class="img-responsive" alt="overview"><br>
+                    <p>The proposed CVT (<b>C</b>ontrastive In-<b>V</b>oxel <b>T</b>ransformer)-xRF for learning radiance fields from sparse inputs. It
+                    consists of three parts, i.e., a voxel-based ray sampling strategy, a local implicit constraint module, and a global explicit constraint module.
+                    For simplicity, two voxels are shown, along with two rays for each. The local implicit constraint is implemented by a light-weight In-
+                    Voxel Transformer which infers colors and densities of ray points by interacting with surrounding 3D points. The ray points are then
+                    inserted among the points from the importance sampler for rendering. The global explicit constraint is conducted by a voxel contrastive
+                    regularization, which regularizes the radiance properties between points in a voxel to be more similar than that of points across voxels.</p>
+            </div>
+        </div>
+
+        <div class="separator-container">
+            <div class="separator"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Novel View Synthesis
+                </h3>
+                The following videos illustrates the effectiveness of the CVT module on different baselines. For each video, the lhs is synthesized by the baseline, 
+                while the rhs is synthesized by the CVT-xRF. 
+                <br><br>
+                <h4 class="text-center" style="margin-top: 1px;">
+                    BARF <i>v.s.</i> CVT-xRF (w/ BARF)
+                </h4>
+                <div class="separator-container">
+                    <div class="separator" style="width: 30%; margin: 1px"></div>
+                </div>
+                <h5>
+                    &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; BARF &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; CVT-xRF (w/ BARF)
+                    &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; BARF &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; CVT-xRF (w/ BARF)
+                </h5>
+                <h5 class="text-left" style="margin-top: 5px;">
+                    3 input views
+                </h5>
+                <div class="video-container-2col">
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/barf/scan31_n3.mp4" type="video/mp4" />
+                    </video>
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/barf/scan103_n3.mp4" type="video/mp4" />
+                    </video>
+                </div>
+                <h5 class="text-left" style="margin-top: 5px;">
+                    6 input views
+                </h5>
+                <div class="video-container-2col">
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/barf/scan40_n6.mp4" type="video/mp4" />
+                    </video>
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/barf/scan110_n6.mp4" type="video/mp4" />
+                    </video>
+                </div>
+                <h5 class="text-left" style="margin-top: 5px;">
+                    9 input views
+                </h5>
+                <div class="video-container-2col">
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/barf/scan55_n6.mp4" type="video/mp4" />
+                    </video>
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/barf/scan114_n9.mp4" type="video/mp4" />
+                    </video>
+                </div>
+
+                <h4 class="text-center" style="margin-top: 10px;">
+                    SPARF <i>v.s.</i> CVT-xRF (w/ SPARF)
+                </h4>
+                <div class="separator-container">
+                    <div class="separator" style="width: 30%; margin: 1px"></div>
+                </div>
+                <h5>
+                    &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; SPARF &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; CVT-xRF (w/ SPARF)
+                    &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; SPARF &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; CVT-xRF (w/ SPARF)
+                </h5>
+                <h5 class="text-left" style="margin-top: 5px;">
+                    3 input views
+                </h5>
+                <div class="video-container-2col">
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/sparf/scan31_3view.mp4" type="video/mp4" />
+                    </video>
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/sparf/scan114_3view.mp4" type="video/mp4" />
+                    </video>
+                </div>
+                <h5 class="text-left" style="margin-top: 5px;">
+                    6 input views
+                </h5>
+                <div class="video-container-2col">
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/sparf/scan8_6view.mp4" type="video/mp4" />
+                    </video>
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/sparf/scan82_6view.mp4" type="video/mp4" />
+                    </video>
+                </div>
+                <h5 class="text-left" style="margin-top: 5px;">
+                    9 input views
+                </h5>
+                <div class="video-container-2col">
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/sparf/scan34_9view.mp4" type="video/mp4" />
+                    </video>
+                    <video id="v11" width="50%" autoplay loop muted controls>
+                        <source src="videos/sparf/scan45_9view.mp4" type="video/mp4" />
+                    </video>
+                </div>
+                
+                
+                <!-- <p class="text-justify">
+                    Typical positional encoding (as used in Transformer networks and Neural Radiance Fields) maps a single point in space to a feature vector, where each element is generated by a sinusoid with an exponentially increasing frequency:
+                </p> -->
+            </div>
+        </div>
+
+        <div class="separator-container">
+            <div class="separator"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Radiance Fields Visualization
+                </h3>
+                We apply the visualization tool from <a href="https://mizhenxing.github.io/switchnerf/">SwitchNeRF</a> to visualize the learned 3D radiance fields. The visualized 3D fields 
+                differ from 2D volume-rendered synthesis, since the 3D field records the density/color of 3D points. Visualizing the 3D fields helps us analyze the artifacts in the 2D images 
+                which are caused by incorrect density distribution. The following video illustrates the learned radiance fields of SPARF and CVT-xRF (w/ SPARF). 
+                <br><br>
+                <div class="video-container">
+                    <video id="v11" width="90%" muted controls>
+                        <source src="videos/fields_vis.mp4" type="video/mp4" />
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <div class="separator-container">
+            <div class="separator"></div>
+        </div>
+      
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Citation
+                </h3>
+            If you want to cite our work, please use: 
+            
+            </div>
+        </div>
+
+        <div class="separator-container">
+            <div class="separator"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Acknowledgements
+                </h3>
+                <p class="text-justify">
+                    This webpage integrates components from various websites, including <a href="https://jonbarron.info/mipnerf/">Mip-NeRF</a>, 
+                    <a href="https://jiawei-yang.github.io/FreeNeRF/">FreeNeRF</a>, and <a href="https://m-niemeyer.github.io/regnerf/">RegNeRF</a>.
+                    We would like to express our sincere gratitude to their remarkable works and impressive webpages. 
+                </p>
+            </div>
+        </div>
+        
+        <br><br><br>
+    </div>
+</body>
+</html>
