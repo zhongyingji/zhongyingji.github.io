@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="description"
         content="Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs">
-  <meta name="keywords" content="VastGaussian">
+  <meta name="keywords" content="guidedvd-3dgs">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs</title>
 
@@ -105,22 +105,22 @@ MathJax.Hub.Config({
 
 
 <section class="section">
-  <div class="columns is-centered has-text-centered">
-    <div class="column is-three-fifths">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
       <img alt="Architecture" src="./static/images/teaser.png" width="100%"/>
-      <div class="content has-text-justified">
-        <p style="margin:1px">
-          We tackle the critical issues of <span style="color:#20c5e2"><b>(a) extrapolation and (b) occlusion</b></span> 
+    </div>
+    <div class="content has-text-justified">
+      <p style="margin:1px">
+        We tackle the critical issues of <span style="color:#20c5e2"><b>(a) extrapolation and (b) occlusion</b></span> 
           in sparse-input 3DGS by leveraging a video diffusion model. Vanilla generation often suffers from inconsistencies within the 
           generated sequences (as highlighted by the yellow arrows), leading to black shadows in the rendered images. 
           In contrast, our scene-grounding generation produces consistent sequences, effectively addressing these issues and enhancing 
           overall quality (c), as indicated by the blue boxes. The numbers refer to PSNR values. 
-        </p>
-      </div>
+      </p>
     </div>
   </div>
-</div>
 </section>
+
 
 
 <section class="section">
@@ -194,10 +194,11 @@ MathJax.Hub.Config({
 
 
 <section class="hero is-light is-small">
+  <div class="columns is-centered">
+  <div class="column is-three-fifths">
   <div class="hero-body">
     <div class="content">
       <div class="columns is-centered">
-        
         <div class="column is-one-third">
           <div class="video-compare-container" id="fsgs1">
             <video class="video" id="fsgsvideo1" loop playsinline autoPlay muted src="./static/videos/room0_fsgs_vs_ours_concat_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
@@ -221,13 +222,17 @@ MathJax.Hub.Config({
       </div>
       <p class="subtitle has-text-centered">
         <!-- Please click the videos for better view. -->
-        <b>Comparison with FSGS. </b>Please drag the slider for better comparisons. 
+        <b>Comparison with FSGS. </b>Please click the videos and drag the slider for better comparisons. 
       </p>
     </div>
   </div>
+</div>
+</div>
 </section>
 
 <section class="hero is-light is-small">
+  <div class="columns is-centered">
+  <div class="column is-three-fifths">
   <div class="hero-body">
     <div class="content">
       <div class="columns is-centered">
@@ -255,10 +260,12 @@ MathJax.Hub.Config({
       </div>
       <p class="subtitle has-text-centered">
         <!-- Please click the videos for better view. -->
-        <b>Comparison with DNGaussian. </b>Please drag the slider for better comparisons. 
+        <b>Comparison with DNGaussian. </b>Please click the videos and drag the slider for better comparisons. 
       </p>
     </div>
   </div>
+</div>
+</div>
 </section>
 
 
@@ -279,7 +286,10 @@ MathJax.Hub.Config({
   </div>
 </section>
 
+
 <section class="hero is-light is-small">
+  <div class="columns is-centered">
+  <div class="column is-three-fifths">
   <div class="hero-body">
     <div class="content">
       <div class="columns is-centered">
@@ -307,10 +317,12 @@ MathJax.Hub.Config({
       </div>
       <p class="subtitle has-text-centered">
         <!-- Please click the videos for better view. -->
-        Please drag the slider for better comparisons. 
+        Please click the videos and drag the slider for better comparisons. 
       </p>
     </div>
   </div>
+</div>
+</div>
 </section>
 
 <section class="section">
@@ -330,6 +342,8 @@ MathJax.Hub.Config({
 </section>
 
 <section class="hero is-light is-small">
+  <div class="columns is-centered">
+  <div class="column is-three-fifths">
   <div class="hero-body">
     <div class="content">
       <div class="columns is-centered">
@@ -356,10 +370,12 @@ MathJax.Hub.Config({
       </div>
       <p class="subtitle has-text-centered">
         <!-- Please click the videos for better view. -->
-        Please drag the slider for better comparisons. 
+        Please click the videos and drag the slider for better comparisons. 
       </p>
     </div>
   </div>
+</div>
+</div>
 </section>
 
 <!-- Bitex -->

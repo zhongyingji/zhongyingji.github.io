@@ -1,1 +1,1 @@
-Please click the demo page "demo.html" for visualization. 
+Please click the demo page "index.html" for visualization. 
