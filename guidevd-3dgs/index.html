@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs">
+  <meta name="keywords" content="VastGaussian">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs</title>
+
+  <!-- <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet"> -->
+
+  <link rel="stylesheet" href="./static/css/font.css">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/academicons.all.min.css">
+  <!-- <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"> -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/icon.png">
+
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+  <script defer src="./static/js/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/video_comparison.js"></script>
+
+  <!-- <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"> -->
+</script>        
+  
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+});
+</script>
+
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body", style="padding-bottom: 0rem;">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 style="font-size:35px"><b>Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs</b></h1>
+          <!-- class="title is-1 publication-title" -->
+          <br>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://zhongyingji.github.io/">
+                <sup>1</sup>Yingji Zhong
+              </a>&nbsp;&nbsp;
+              <a href="https://scholar.google.com/citations?user=4cuefJ0AAAAJ&hl=en">
+                <sup>2</sup>Zhihao Li
+              </a>&nbsp;&nbsp;
+              <a href="https://scholar.google.de/citations?user=hon4EsIAAAAJ&hl=en">
+                <sup>2</sup>Dave Zhenyu Chen
+              </a>&nbsp;&nbsp;
+              <a href="https://scholar.google.com.hk/citations?user=2p7x6OUAAAAJ&hl=zh-CN/">
+                <sup>2</sup>Lanqing Hong
+              </a>&nbsp;&nbsp;
+              <a href="https://www.danxurgb.net/">
+                <sup>1</sup>Dan Xu
+              </a>&nbsp;&nbsp;</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <sup>1</sup>The Hong Kong University of Science and Technology
+            &nbsp;&nbsp;
+            <sup>2</sup>Huawei Noah's Ark Lab
+            &nbsp;&nbsp;
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block", style="color:#22171e7b";><b>CVPR 2025</b></span>
+          </div>
+          
+          <div class="column has-text-centered">
+            <div class="is-size-5 publication-authors">
+              <ul class="nav nav-pills nav-justified" style="display: flex; justify-content: center; list-style: none; padding: 0;">
+                <li style="display: inline-block; margin: 0 10px; text-align: center;">
+                  <a href="" target="_blank" class="imageLink"><img
+                      src="https://www.filepicker.io/api/file/XQvDkgbsRiiPh8VSZ8wu" width="70%"></a>
+                  <a href="" target="_blank"><h4><strong>Paper</strong></h4></a>
+                </li>
+                <li style="display: inline-block; margin: 0 10px; text-align: center;">
+                  <a href="https://github.com/zhongyingji/guidedvd-3dgs" target="_blank" class="imageLink"><img
+                      src="static/images/github.png" width="55.4%"></a>
+                  <a href="https://github.com/zhongyingji/guidedvd-3dgs" target="_blank"><h4><strong>Code</strong></h4></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-three-fifths">
+      <img alt="Architecture" src="./static/images/teaser.png" width="100%"/>
+      <div class="content has-text-justified">
+        <p style="margin:1px">
+          We tackle the critical issues of <span style="color:#20c5e2"><b>(a) extrapolation and (b) occlusion</b></span> 
+          in sparse-input 3DGS by leveraging a video diffusion model. Vanilla generation often suffers from inconsistencies within the 
+          generated sequences (as highlighted by the yellow arrows), leading to black shadows in the rendered images. 
+          In contrast, our scene-grounding generation produces consistent sequences, effectively addressing these issues and enhancing 
+          overall quality (c), as indicated by the blue boxes. The numbers refer to PSNR values. 
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">Abstract</h2>
+      </div>
+    </div>
+    <div class="content has-text-justified">
+      <p style="margin:1px">
+        Despite recent successes in novel view synthesis using 3D Gaussian Splatting (3DGS), modeling scenes with sparse inputs remains a challenge. 
+        In this work, we address two critical yet overlooked issues in real-world sparse-input modeling: extrapolation and occlusion. 
+        To tackle these issues, we propose to use a reconstruction by generation pipeline that leverages learned priors from video diffusion models 
+        to provide plausible interpretations for regions outside the field of view or occluded. However, the generated sequences exhibit 
+        inconsistencies that do not fully benefit subsequent 3DGS modeling. To address the challenge of inconsistency, 
+        we introduce a novel scene-grounding guidance based on rendered sequences from an optimized 3DGS, 
+        which tames the diffusion model to generate consistent sequences. This guidance is training-free and 
+        does not require any fine-tuning of the diffusion model. To facilitate holistic scene modeling, 
+        we also propose a trajectory initialization method. It effectively identifies regions that are outside the field of view and occluded. 
+        We further design a scheme tailored for 3DGS optimization with generated sequences. Experiments demonstrate 
+        that our method improves upon the baseline and achieves state-of-the-art performance on challenging benchmarks.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">Framework Overview</h2>
+      </div>
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <img alt="Architecture" src="./static/images/method.png" width="100%"/>
+    </div>
+    <div class="content has-text-justified">
+      <p style="margin:1px">
+        Our method consists of three parts: scene-grounding guidance, trajectory initialization, and optimization scheme with generated sequences. 
+        Initially, a baseline 3DGS is trained using sparse inputs and initialized with the point cloud from DUSt3R<sup>[1]</sup>. 
+        Yellow regions denote uncovered areas, e.g., those outside the field of view or occluded.
+        The trajectory initialization determines the paths for sequence generation based on renderings from the baseline 3DGS, 
+        facilitating holistic scene modeling. The video diffusion model receives an input image along with the trajectory for sequence generation, 
+        incorporating scene-grounding guidance during the denoising process to ensure consistent output. 
+        The guidance is based on the rendered sequences. Finally, the generated sequences are utilized to optimize the final 3DGS through a 
+        tailored optimization scheme. We use the open-source pose-controllable video diffusion model, ViewCrafter<sup>[2]</sup> for the sequence generation. 
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">Comparison with SOTA</h2>
+        <!-- <h2 style="font-size:25px">Comparison with SOTAs</h2> -->
+      </div>
+    </div>
+    <div class="content has-text-justified">
+      <p style="margin:1px">
+        Comparisons with FSGS<sup>[3]</sup> and DNGaussian<sup>[4]</sup>, the two leading approaches for sparse-input 3DGS modeling based on monocular depth regularization. 
+        All methods are initialized with the DUSt3R point cloud<sup>[1]</sup>. 
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="content">
+      <div class="columns is-centered">
+        
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="fsgs1">
+            <video class="video" id="fsgsvideo1" loop playsinline autoPlay muted src="./static/videos/room0_fsgs_vs_ours_concat_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="fsgsvideo1Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="fsgs2">
+            <video class="video" id="fsgsvideo2" loop playsinline autoPlay muted src="./static/videos/office2_fsgs_vs_ours_concat_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="fsgsvideo2Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv3fsgs">
+            <video class="video" id="fsgsvideo3" loop playsinline autoPlay muted src="./static/videos/office3_fsgs_vs_ours_concat_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="fsgsvideo3Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+      </div>
+      <p class="subtitle has-text-centered">
+        <!-- Please click the videos for better view. -->
+        <b>Comparison with FSGS. </b>Please drag the slider for better comparisons. 
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="content">
+      <div class="columns is-centered">
+        
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="dngs1">
+            <video class="video" id="dngsvideo1" loop playsinline autoPlay muted src="./static/videos/room0_dngs_vs_ours_concat_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="dngsvideo1Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="dngs2">
+            <video class="video" id="dngsvideo2" loop playsinline autoPlay muted src="./static/videos/office2_dngs_vs_ours_concat_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="dngsvideo2Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv3dngs">
+            <video class="video" id="dngsvideo3" loop playsinline autoPlay muted src="./static/videos/office3_dngs_vs_ours_concat_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="dngsvideo3Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+      </div>
+      <p class="subtitle has-text-centered">
+        <!-- Please click the videos for better view. -->
+        <b>Comparison with DNGaussian. </b>Please drag the slider for better comparisons. 
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">Comparison with No Guidance</h2>
+      </div>
+    </div>
+    <div class="content has-text-justified">
+      <p>
+        Optimizing a 3DGS with generated sequences without the proposed guidance will result in black shadows in renderings, 
+        due to the inconsistency within sequences from the video diffusion model.  
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="content">
+      <div class="columns is-centered">
+        
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv1">
+            <video class="video" id="materials1" loop playsinline autoPlay muted src="./static/videos/room0_noguidance_vs_ours_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="materials1Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv2">
+            <video class="video" id="materials2" loop playsinline autoPlay muted src="./static/videos/office2_noguidance_vs_ours_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="materials2Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv3">
+            <video class="video" id="materials3" loop playsinline autoPlay muted src="./static/videos/office3_noguidance_vs_ours_x264.mp4" onplay="resizeAndPlay(this)" height="50%"></video>
+            <canvas height=0 class="videoMerge" id="materials3Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+      </div>
+      <p class="subtitle has-text-centered">
+        <!-- Please click the videos for better view. -->
+        Please drag the slider for better comparisons. 
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">Comparison with Baseline</h2>
+      </div>
+    </div>
+    <div class="content has-text-justified">
+      <p>
+        The baseline 3DGS is optimized with the initialization of DUSt3R point cloud, incorporating the gaussian unpooling from FSGS. 
+        It is a strong baseline as indicated by the performance in the main paper.  
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="content">
+      <div class="columns is-centered">
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv4">
+            <video class="video" id="materials4" loop playsinline autoPlay muted src="./static/videos/room0_baseline_vs_ours_x264.mp4" onplay="resizeAndPlay(this)"></video>
+            <canvas height=0 class="videoMerge" id="materials4Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv5">
+            <video class="video" id="materials5" loop playsinline autoPlay muted src="./static/videos/office2_baseline_vs_ours_x264.mp4" onplay="resizeAndPlay(this)"></video>
+            <canvas height=0 class="videoMerge" id="materials5Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <div class="video-compare-container" id="materialsDiv6">
+            <video class="video" id="materials6" loop playsinline autoPlay muted src="./static/videos/office3_baseline_vs_ours_x264.mp4" onplay="resizeAndPlay(this)"></video>
+            <canvas height=0 class="videoMerge" id="materials6Merge" style="border-radius: 2px;"></canvas>
+          </div>
+        </div>
+      </div>
+      <p class="subtitle has-text-centered">
+        <!-- Please click the videos for better view. -->
+        Please drag the slider for better comparisons. 
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Bitex -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <b class="title" style="font-size:20px">References</b>
+    <pre style="background-color: #FFFFFF; ">
+[1] Wang et al. Dust3r: Geometric 3d vision made easy. In CVPR, 2024.
+[2] Yu et al. Viewcrafter: Taming video diffusion models for high-fidelity novel view synthesis. arXiv:2409.02048, 2024.
+[3] Zhu et al. Fsgs: Real-time few-shot view synthesis using gaussian splatting. In ECCV, 2024.
+[4] Li et al. Dngaussian: Optimizing sparse-view 3d gaussian radiance fields with global-local depth normalization. In CVPR, 2024
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            We thank the authors of <a
+            href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> that kindly open sourced the template of this website.
+            The html script of video comparison is borrowed from <a
+            href="https://dorverbin.github.io/refnerf/">Ref-NeRF</a>. 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.video-compare-container').forEach(function (container, index) {
+      console.log("Index of the container:", index);
+      container.addEventListener('click', function () {
+        if (index === 0) {
+          this.classList.toggle('expand-right');
+        } else if (index === 2) {
+          this.classList.toggle('expand-left');
+        } else {
+          this.classList.toggle('expanded');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
