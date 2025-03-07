@@ -146,7 +146,8 @@ MathJax.Hub.Config({
           generated sequences (as highlighted by the yellow arrows), leading to black shadows in the rendered images. 
           In contrast, our scene-grounding generation produces consistent sequences, effectively addressing these issues and enhancing 
           overall quality (c), as indicated by the blue boxes. The numbers refer to PSNR values. All visualization results in the following 
-          are rendered with 3DGS optimized with <span style="color:#20c5e2"><b>6 input views</b></span>. 
+          are rendered with 3DGS optimized with <span style="color:#20c5e2"><b>6 input views</b></span>, 
+          following the setting of an indoor benchmark<sup>[1]</sup>.
       </p>
     </div>
   </div>
@@ -193,13 +194,13 @@ MathJax.Hub.Config({
     <div class="content has-text-justified">
       <p style="margin:1px">
         Our method consists of three parts: scene-grounding guidance, trajectory initialization, and optimization scheme with generated sequences. 
-        Initially, a baseline 3DGS is trained using sparse inputs and initialized with the point cloud from DUSt3R<sup>[1]</sup>. 
+        Initially, a baseline 3DGS is trained using sparse inputs and initialized with the point cloud from DUSt3R<sup>[2]</sup>. 
         Yellow regions denote uncovered areas, e.g., those outside the field of view or occluded.
         The trajectory initialization determines the paths for sequence generation based on renderings from the baseline 3DGS, 
         facilitating holistic scene modeling. The video diffusion model receives an input image along with the trajectory for sequence generation, 
         incorporating scene-grounding guidance during the denoising process to ensure consistent output. 
         The guidance is based on the rendered sequences. Finally, the generated sequences are utilized to optimize the final 3DGS through a 
-        tailored optimization scheme. We use the open-source pose-controllable video diffusion model, ViewCrafter<sup>[2]</sup> for the sequence generation. 
+        tailored optimization scheme. We use the open-source pose-controllable video diffusion model, ViewCrafter<sup>[3]</sup> for the sequence generation. 
       </p>
     </div>
   </div>
@@ -216,8 +217,8 @@ MathJax.Hub.Config({
     </div>
     <div class="content has-text-justified">
       <p style="margin:1px">
-        Comparisons with FSGS<sup>[3]</sup> and DNGaussian<sup>[4]</sup>, the two leading approaches for sparse-input 3DGS modeling based on monocular depth regularization. 
-        All methods are initialized with the DUSt3R point cloud<sup>[1]</sup>. 
+        Comparisons with FSGS<sup>[4]</sup> and DNGaussian<sup>[5]</sup>, the two leading approaches for sparse-input 3DGS modeling based on monocular depth regularization. 
+        All methods are initialized with the DUSt3R point cloud<sup>[2]</sup>. 
       </p>
     </div>
   </div>
@@ -413,10 +414,11 @@ MathJax.Hub.Config({
   <div class="container is-max-desktop content">
       <h2 class="title">References</h2>
       <pre style="background-color: #FFFFFF; ">
-[1] Wang et al. Dust3r: Geometric 3d vision made easy. In CVPR, 2024.
-[2] Yu et al. Viewcrafter: Taming video diffusion models for high-fidelity novel view synthesis. arXiv:2409.02048, 2024.
-[3] Zhu et al. Fsgs: Real-time few-shot view synthesis using gaussian splatting. In ECCV, 2024.
-[4] Li et al. Dngaussian: Optimizing sparse-view 3d gaussian radiance fields with global-local depth normalization. In CVPR, 2024
+[1] Zhong, et al. Empowering sparse-input neural radiance fields with dual-level semantic guidance from dense novel views. rXiv:2503.02230, 2025. 
+[2] Wang et al. Dust3r: Geometric 3d vision made easy. In CVPR, 2024.
+[3] Yu et al. Viewcrafter: Taming video diffusion models for high-fidelity novel view synthesis. arXiv:2409.02048, 2024.
+[4] Zhu et al. Fsgs: Real-time few-shot view synthesis using gaussian splatting. In ECCV, 2024.
+[5] Li et al. Dngaussian: Optimizing sparse-view 3d gaussian radiance fields with global-local depth normalization. In CVPR, 2024. 
 </section>
 
 <section class="section" id="BibTeX">
