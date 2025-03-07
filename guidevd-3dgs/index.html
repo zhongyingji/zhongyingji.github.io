@@ -33,6 +33,8 @@
 
   <!-- <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"> -->
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 </script>        
   
 <script type="text/x-mathjax-config">
@@ -52,23 +54,27 @@ MathJax.Hub.Config({
           <h1 style="font-size:35px"><b>Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs</b></h1>
           <!-- class="title is-1 publication-title" -->
           <br>
+          <div class="is-size-4 publication-authors">
+            <span class="author-block", style="color:#22171e7b";><b>CVPR 2025</b></span>
+          </div>
+          <br>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://zhongyingji.github.io/">
+              <a href="https://github.com/zhongyingji">
                 <sup>1</sup>Yingji Zhong
-              </a>&nbsp;&nbsp;
+              </a>&nbsp;&nbsp;&nbsp;&nbsp;
               <a href="https://scholar.google.com/citations?user=4cuefJ0AAAAJ&hl=en">
                 <sup>2</sup>Zhihao Li
-              </a>&nbsp;&nbsp;
+              </a>&nbsp;&nbsp;&nbsp;&nbsp;
               <a href="https://scholar.google.de/citations?user=hon4EsIAAAAJ&hl=en">
                 <sup>2</sup>Dave Zhenyu Chen
-              </a>&nbsp;&nbsp;
-              <a href="https://scholar.google.com.hk/citations?user=2p7x6OUAAAAJ&hl=zh-CN/">
+              </a>&nbsp;&nbsp;&nbsp;&nbsp;
+              <a href="https://scholar.google.com.hk/citations?user=2p7x6OUAAAAJ&hl=zh-CN">
                 <sup>2</sup>Lanqing Hong
-              </a>&nbsp;&nbsp;
-              <a href="https://www.danxurgb.net/">
+              </a>&nbsp;&nbsp;&nbsp;&nbsp;
+              <a href="https://www.danxurgb.net">
                 <sup>1</sup>Dan Xu
-              </a>&nbsp;&nbsp;</span>
+              </a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </div>
           <div class="is-size-5 publication-authors">
             <sup>1</sup>The Hong Kong University of Science and Technology
@@ -76,11 +82,9 @@ MathJax.Hub.Config({
             <sup>2</sup>Huawei Noah's Ark Lab
             &nbsp;&nbsp;
           </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block", style="color:#22171e7b";><b>CVPR 2025</b></span>
-          </div>
           
-          <div class="column has-text-centered">
+          
+          <!-- <div class="column has-text-centered">
             <div class="is-size-5 publication-authors">
               <ul class="nav nav-pills nav-justified" style="display: flex; justify-content: center; list-style: none; padding: 0;">
                 <li style="display: inline-block; margin: 0 10px; text-align: center;">
@@ -94,6 +98,32 @@ MathJax.Hub.Config({
                   <a href="https://github.com/zhongyingji/guidedvd-3dgs" target="_blank"><h4><strong>Code</strong></h4></a>
                 </li>
               </ul>
+            </div>
+          </div> -->
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                    <a href="https://arxiv.org/abs/2503.02230" class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                            <i class="ai ai-arxiv"></i>
+                        </span>
+                        <span>arXiv</span>
+                    </a>
+                </span>
+
+                <!-- Github Link. -->
+                <span class="link-block">
+                    <a href="https://github.com/zhongyingji/guidedvd-3dgs" class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                            <i class="fab fa-github"></i>
+                        </span>
+                        <span>Code (to be released)</span>
+                    </a>
+                </span>
+                <!-- Dataset Link. -->
+                <span class="link-block"></span>
             </div>
           </div>
           
@@ -115,7 +145,8 @@ MathJax.Hub.Config({
           in sparse-input 3DGS by leveraging a video diffusion model. Vanilla generation often suffers from inconsistencies within the 
           generated sequences (as highlighted by the yellow arrows), leading to black shadows in the rendered images. 
           In contrast, our scene-grounding generation produces consistent sequences, effectively addressing these issues and enhancing 
-          overall quality (c), as indicated by the blue boxes. The numbers refer to PSNR values. 
+          overall quality (c), as indicated by the blue boxes. The numbers refer to PSNR values. All visualization results in the following 
+          are rendered with 3DGS optimized with <span style="color:#20c5e2"><b>6 input views</b></span>. 
       </p>
     </div>
   </div>
@@ -378,15 +409,24 @@ MathJax.Hub.Config({
 </div>
 </section>
 
-<!-- Bitex -->
-<section class="section" id="BibTeX">
+<section class="section" id="Reference">
   <div class="container is-max-desktop content">
-    <b class="title" style="font-size:20px">References</b>
-    <pre style="background-color: #FFFFFF; ">
+      <h2 class="title">References</h2>
+      <pre style="background-color: #FFFFFF; ">
 [1] Wang et al. Dust3r: Geometric 3d vision made easy. In CVPR, 2024.
 [2] Yu et al. Viewcrafter: Taming video diffusion models for high-fidelity novel view synthesis. arXiv:2409.02048, 2024.
 [3] Zhu et al. Fsgs: Real-time few-shot view synthesis using gaussian splatting. In ECCV, 2024.
 [4] Li et al. Dngaussian: Optimizing sparse-view 3d gaussian radiance fields with global-local depth normalization. In CVPR, 2024
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre>
+<code>
+to be filled
+</code></pre>
+  </div>
 </section>
 
 
