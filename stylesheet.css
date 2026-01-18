@@ -141,6 +141,13 @@ span.highlight {
     border-radius: 10px;
 }
 
+/* Paper images styling */
+td img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+}
+
 /* Footer separator line */
 .footer-separator {
     border: 0;
