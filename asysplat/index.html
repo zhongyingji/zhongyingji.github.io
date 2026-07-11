@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="AsySplat: Efficient Asymmetric 3D Gaussian Splatting for Long-Sequence Scene Modeling">
+  <meta name="keywords" content="AsySplat, 3D Gaussian Splatting, Long-Sequence Reconstruction">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AsySplat</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/font.css">
+  <link rel="stylesheet" href="./static/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/styles.css">
+  <script defer src="./static/js/slider-index.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/video_comparison.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --surface-color: #f6f8fb;
+      --card-bg: #ffffff;
+      --text-main: #17181c;
+      --text-muted: #5f6470;
+      --border-color: #e2e6ef;
+      --accent-blue: #2256c7;
+      --accent-pink: #c91c71;
+      --accent-gradient: linear-gradient(90deg, #0f766e, #2563eb 48%, #d94645);
+      --shadow-soft: 0 18px 45px rgba(26, 35, 58, 0.12);
+      --font-stack: 'DM Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-stack);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .navbar {
+      align-items: center;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid var(--border-color);
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 1fr auto 1fr;
+      left: 0;
+      padding: 16px 40px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      justify-self: center;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .hero {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      min-height: 92vh;
+      padding: 120px 20px 38px;
+      text-align: center;
+    }
+
+    .hero-content {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      width: min(100%, 1280px);
+    }
+
+    h1 {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      font-size: clamp(3.4rem, 8vw, 6.4rem);
+      line-height: 1;
+      margin: 0 0 12px;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-main);
+      font-size: clamp(1.15rem, 2vw, 1.65rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+      max-width: none;
+      white-space: nowrap;
+    }
+
+    .authors {
+      color: var(--text-main);
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+      margin-top: 0;
+    }
+
+    .author-name {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .authors sup {
+      color: var(--accent-blue);
+      font-size: 0.72em;
+      font-weight: 800;
+      margin-left: 1px;
+    }
+
+    .institution {
+      color: var(--text-muted);
+      display: inline-block;
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .btn {
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      display: inline-flex;
+      gap: 8px;
+      font-weight: 700;
+      padding: 11px 22px;
+    }
+
+    .btn.primary {
+      background: var(--text-main);
+      color: #ffffff;
+    }
+
+    .btn.secondary {
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    .hero-teaser {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-soft);
+      margin-top: 42px;
+      overflow: hidden;
+      width: min(100%, 1080px);
+    }
+
+    .hero-teaser video,
+    .hero-teaser img {
+      display: block;
+      width: 100%;
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 1120px;
+      padding: 0 20px;
+    }
+
+    .section-header {
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 34px;
+      padding-bottom: 16px;
+    }
+
+    .section-header h2,
+    .intro h2 {
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    .showcase-note {
+      border-left: 3px solid #d94645;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-top: 12px;
+      padding-left: 18px;
+    }
+
+    .dl3dv-caption {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.55;
+      margin: 12px auto 0;
+      max-width: 860px;
+      text-align: center;
+    }
+
+    .tldr {
+      color: var(--text-muted);
+      font-size: 1.02rem;
+      margin-top: 12px;
+      max-width: 920px;
+      text-align: center;
+    }
+
+    .showcase-note strong,
+    .desc-box p strong,
+    .abstract-text strong,
+    .card p strong,
+    .tldr strong {
+      color: inherit;
+      font-weight: 700;
+      -webkit-text-stroke: 0;
+    }
+
+    .intro {
+      background: var(--surface-color);
+      border-bottom: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-color);
+      padding: 74px 0;
+      text-align: center;
+    }
+
+    .lead {
+      font-size: 1.8rem;
+      margin: 0 auto 30px;
+      max-width: 900px;
+    }
+
+    .abstract-text {
+      color: var(--text-muted);
+      margin: 0 auto;
+      max-width: 830px;
+      text-align: justify;
+    }
+
+    .dl3dv-strip {
+      padding: 34px 0 66px;
+    }
+
+    .dl3dv-strip .container {
+      max-width: 1280px;
+    }
+
+    .scroll-gallery {
+      display: grid;
+      gap: 18px;
+      grid-auto-columns: minmax(430px, 56%);
+      grid-auto-flow: column;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      padding: 6px 4px 18px;
+      scroll-snap-type: inline mandatory;
+      scrollbar-width: thin;
+    }
+
+    .dl3dv-carousel {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      padding: 26px 58px 18px;
+      position: relative;
+    }
+
+    .dl3dv-pagination {
+      align-items: center;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 4px;
+      padding: 2px 0 0;
+    }
+
+    .dl3dv-dot {
+      background: transparent;
+      border: 1.8px solid #8e97ab;
+      border-radius: 999px;
+      box-shadow: 0 2px 5px rgba(50, 50, 50, 0.1);
+      cursor: pointer;
+      height: 10px;
+      padding: 0;
+      transition: background-color 180ms ease, transform 180ms ease, border-color 180ms ease;
+      width: 10px;
+    }
+
+    .dl3dv-dot:hover,
+    .dl3dv-dot.active {
+      background: #8e97ab;
+      border-color: #8e97ab;
+      transform: scale(1.35);
+    }
+
+    .scroll-gallery::-webkit-scrollbar,
+    .choice-strip::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .scroll-gallery::-webkit-scrollbar-thumb,
+    .choice-strip::-webkit-scrollbar-thumb {
+      background: #c8ceda;
+      border-radius: 999px;
+    }
+
+    .scroll-card {
+      background: #0b0d12;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 12px 32px rgba(26, 35, 58, 0.14);
+      cursor: zoom-in;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+
+    .scroll-card video {
+      aspect-ratio: 16 / 9;
+      display: block;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .video-lightbox {
+      align-items: center;
+      background: rgba(10, 13, 18, 0.72);
+      display: none;
+      inset: 0;
+      justify-content: center;
+      padding: 24px;
+      position: fixed;
+      z-index: 2000;
+    }
+
+    .video-lightbox.open {
+      display: flex;
+    }
+
+    .video-lightbox-panel {
+      background: #0b0d12;
+      border-radius: 10px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+      overflow: hidden;
+      position: relative;
+      width: min(700px, calc(100vw - 48px));
+    }
+
+    .video-lightbox video {
+      aspect-ratio: 16 / 9;
+      background: #0b0d12;
+      display: block;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    .video-lightbox-close {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 999px;
+      color: var(--text-main);
+      cursor: pointer;
+      font: inherit;
+      font-size: 1.2rem;
+      font-weight: 800;
+      height: 34px;
+      line-height: 1;
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 34px;
+      z-index: 2;
+    }
+
+    .video-lightbox-close:hover {
+      background: #ffffff;
+    }
+
+    .compare-lightbox {
+      align-items: center;
+      background: rgba(10, 13, 18, 0.72);
+      display: none;
+      inset: 0;
+      justify-content: center;
+      padding: 24px;
+      position: fixed;
+      z-index: 2100;
+    }
+
+    .compare-lightbox.open {
+      display: flex;
+    }
+
+    .compare-lightbox-panel {
+      background: #0b0d12;
+      border-radius: 10px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+      overflow: hidden;
+      position: relative;
+      width: min(700px, calc(100vw - 48px));
+    }
+
+    .compare-canvas-wrap {
+      background: #0b0d12;
+      width: 100%;
+    }
+
+    .compare-canvas-wrap video {
+      display: none;
+    }
+
+    .compare-canvas-wrap canvas {
+      cursor: ew-resize;
+      display: block;
+      width: 100%;
+    }
+
+    .compare-lightbox-close {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 999px;
+      color: var(--text-main);
+      cursor: pointer;
+      font: inherit;
+      font-size: 1.2rem;
+      font-weight: 800;
+      height: 34px;
+      line-height: 1;
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 34px;
+      z-index: 2;
+    }
+
+    .compare-controls {
+      align-items: center;
+      background: #111318;
+      color: #f5f7fb;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: auto auto 1fr auto;
+      padding: 12px 14px;
+    }
+
+    .compare-play-button {
+      align-items: center;
+      background: #ffffff;
+      border: 0;
+      border-radius: 999px;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      height: 34px;
+      justify-content: center;
+      width: 34px;
+    }
+
+    .compare-time {
+      font-size: 0.9rem;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .compare-seek {
+      accent-color: var(--accent-blue);
+      width: 100%;
+    }
+
+    .carousel-button {
+      align-items: center;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      box-shadow: 0 10px 24px rgba(26, 35, 58, 0.18);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      font-size: 2rem;
+      font-weight: 700;
+      height: 42px;
+      justify-content: center;
+      line-height: 1;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      z-index: 2;
+    }
+
+    .carousel-button:hover {
+      background: #ffffff;
+      border-color: #cfd4df;
+    }
+
+    .carousel-button.prev {
+      left: 14px;
+    }
+
+    .carousel-button.next {
+      right: 14px;
+    }
+
+    .features {
+      padding: 72px 0 90px;
+    }
+
+    .diagram-container {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .diagram-container img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+
+    .diagram-mosaic {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 300px);
+    }
+
+    .diagram-panel {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      padding: 4px 4px 7px;
+    }
+
+    .diagram-panel img {
+      object-fit: contain;
+      width: 100%;
+    }
+
+    .diagram-figure {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      min-height: 0;
+      width: 100%;
+    }
+
+    .diagram-note {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 800;
+      font-style: italic;
+      line-height: 1.35;
+      margin-top: 5px;
+      max-width: 88%;
+      text-align: center;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .diagram-panel.figure-1 {
+      grid-column: 1 / span 2;
+      grid-row: 1;
+    }
+
+    .diagram-panel.figure-2 {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .diagram-panel.figure-3 {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .diagram-panel.figure-1 img {
+      height: auto;
+      width: 100%;
+    }
+
+    .diagram-panel.figure-2 img,
+    .diagram-panel.figure-3 img {
+      height: 100%;
+      max-height: none;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 34px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 8px 28px rgba(26, 35, 58, 0.08);
+      min-height: 170px;
+      padding: 24px 26px;
+    }
+
+    .card-title {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-index {
+      align-items: center;
+      background: #eef3ff;
+      border: 1px solid rgba(34, 86, 199, 0.18);
+      border-radius: 999px;
+      color: var(--accent-blue);
+      display: inline-flex;
+      font-size: 0.85rem;
+      font-weight: 800;
+      height: 32px;
+      justify-content: center;
+      width: 32px;
+    }
+
+    .card h4 {
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      min-height: 72px;
+    }
+
+    .showcase {
+      background: var(--surface-color);
+      border-top: 1px solid var(--border-color);
+      padding: 78px 0;
+    }
+
+    .showcase-item {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 42px;
+      overflow: hidden;
+    }
+
+    .desc-box {
+      border-bottom: 1px solid var(--border-color);
+      padding: 28px 30px;
+    }
+
+    .desc-box h3 {
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+
+    .desc-box p {
+      color: var(--text-muted);
+      border-left: 3px solid var(--accent-blue);
+      font-size: 1.05rem;
+      padding-left: 18px;
+      width: 100%;
+    }
+
+    .gallery-wrapper {
+      padding: 24px;
+    }
+
+    .indomain-block + .indomain-block {
+      margin-top: 30px;
+    }
+
+    .indomain-selector-block {
+      margin-top: 18px;
+    }
+
+    .indomain-column-title {
+      color: var(--text-main);
+      font-size: 1.28rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .comparison-stage.indomain-nvs-stage {
+      max-width: 1040px;
+    }
+
+    .comparison-stage {
+      align-items: center;
+      background: #0b0d12;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      max-width: 700px;
+      min-height: 260px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .comparison-stage .video-compare-container {
+      align-items: center;
+      cursor: zoom-in;
+      display: flex;
+      justify-content: center;
+      max-height: 650px;
+      position: relative;
+      width: 100%;
+    }
+
+    .comparison-stage video.video {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+
+    .comparison-stage canvas.videoMerge {
+      display: block;
+      height: auto;
+      max-height: 650px;
+      max-width: 100%;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    .image-stage {
+      background: #ffffff;
+      padding: 0;
+    }
+
+    .dual-image-stage {
+      background: #ffffff;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      min-height: 0;
+      padding: 0;
+    }
+
+    .image-compare-panel {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .image-stage img-comparison-slider {
+      display: block;
+      width: 100%;
+      --divider-width: 2px;
+      --divider-color: #ffffff;
+      --default-handle-color: #ffffff;
+      --default-handle-width: 58px;
+      --default-handle-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+    }
+
+    .image-stage img {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+
+    .choice-strip {
+      display: grid;
+      gap: 12px;
+      grid-auto-columns: minmax(120px, 1fr);
+      grid-auto-flow: column;
+      margin: 16px auto 0;
+      max-width: 700px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .choice-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 52px;
+      min-width: 120px;
+      padding: 12px 14px;
+      text-align: center;
+      transition: border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+      white-space: nowrap;
+    }
+
+    .choice-card:hover,
+    .choice-card.active {
+      border-color: rgba(34, 86, 199, 0.65);
+      box-shadow: 0 6px 20px rgba(34, 86, 199, 0.12);
+      color: var(--text-main);
+    }
+
+    .thumbnail-choice-strip {
+      gap: 10px;
+      grid-auto-columns: minmax(120px, 132px);
+      max-width: 700px;
+    }
+
+    .thumbnail-choice {
+      aspect-ratio: 16 / 9;
+      background: #0b0d12;
+      min-height: 0;
+      min-width: 120px;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+    }
+
+    .thumbnail-choice img {
+      display: block;
+      height: 100%;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    .thumbnail-choice.active::after {
+      border: 3px solid rgba(34, 86, 199, 0.92);
+      border-radius: 7px;
+      content: "";
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    footer {
+      color: var(--text-muted);
+      padding: 38px 20px;
+      text-align: center;
+    }
+
+    .bibtex-section {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-color);
+      padding: 58px 0 66px;
+    }
+
+    .bibtex-section h3 {
+      font-size: 1.65rem;
+      margin-bottom: 18px;
+    }
+
+    .bibtex-section pre {
+      background: #f6f8fb;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: #24262d;
+      overflow-x: auto;
+      padding: 22px 24px;
+    }
+
+    .bibtex-section code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.94rem;
+      line-height: 1.55;
+    }
+
+    .footer-content {
+      align-items: center;
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      color: var(--text-main);
+      font-weight: 800;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 18px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-main);
+    }
+
+    @media (max-width: 800px) {
+      .navbar {
+        grid-template-columns: 1fr;
+        padding: 14px 20px;
+        position: static;
+        text-align: center;
+      }
+
+      .nav-links {
+        gap: 18px;
+        justify-self: center;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 58px;
+      }
+
+      .subtitle {
+        white-space: normal;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-mosaic {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        min-height: 0;
+      }
+
+      .diagram-panel.figure-1,
+      .diagram-panel.figure-2,
+      .diagram-panel.figure-3 {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .scroll-gallery {
+        grid-auto-columns: minmax(300px, 90%);
+      }
+
+      .dl3dv-carousel {
+        padding: 18px 44px 12px;
+      }
+
+      .gallery-wrapper,
+      .desc-box {
+        padding: 20px;
+      }
+
+      .dual-image-stage {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="logo" href="#">AsySplat</a>
+    <ul class="nav-links">
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#method">Method</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#bibtex">BibTeX</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <h1>AsySplat</h1>
+      <p class="subtitle">Efficient Asymmetric 3D Gaussian Splatting for Long-Sequence Scene Modeling</p>
+      <div class="authors">
+        <a class="author-name" href="https://zhongyingji.github.io/" target="_blank" rel="noopener noreferrer">Yingji Zhong<sup>1</sup></a>,
+        <a class="author-name" href="https://daveredrum.github.io/" target="_blank" rel="noopener noreferrer">Dave Zhenyu Chen<sup>2</sup></a>,
+        <a class="author-name" href="https://scholar.google.com/citations?user=rKhmgskAAAAJ&amp;hl=zh-CN" target="_blank" rel="noopener noreferrer">Fuzhao Ou<sup>3</sup></a>,
+        <a class="author-name" href="https://scholar.google.com/citations?user=8nMseeUAAAAJ&amp;hl=zh-CN" target="_blank" rel="noopener noreferrer">Youyu Chen<sup>2</sup></a>,
+        <br>
+        <a class="author-name" href="https://scholar.google.com/citations?user=4cuefJ0AAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Zhihao Li<sup>2</sup></a>,
+        <a class="author-name" href="https://racheltechie.github.io/" target="_blank" rel="noopener noreferrer">Lanqing Hong<sup>2</sup></a>,
+        <a class="author-name" href="https://www.danxurgb.net/" target="_blank" rel="noopener noreferrer">Dan Xu<sup>1</sup></a>
+        <br>
+        <span class="institution"><sup>1</sup>The Hong Kong University of Science and Technology (HKUST)</span>
+        <br>
+        <span class="institution"><sup>2</sup>Noah's Ark Lab &nbsp;&nbsp; <sup>3</sup>City University of Hong Kong (CityU)</span>
+      </div>
+      <div class="cta-group">
+        <a class="btn primary" href="#"><i class="ai ai-arxiv"></i> Arxiv</a>
+        <a class="btn primary" href="#"><i class="fas fa-file-pdf"></i> Read Paper</a>
+        <a class="btn primary" href="#"><i class="ai ai-arxiv"></i> HTML</a>
+        <a class="btn primary" href="#"><i class="fab fa-github"></i> GitHub</a>
+      </div>
+      <div class="hero-teaser diagram-container">
+        <div class="diagram-panel">
+          <div class="diagram-figure">
+            <img src="./static/images/teaser.png" alt="AsySplat teaser">
+          </div>
+        </div>
+      </div>
+      <p class="tldr"><strong>TL;DR: AsySplat is a novel asymmetric Gaussian reconstruction framework built upon the idea of computation reallocation, comprehensively reducing overhead while achieving modest to substantial performance gains.</strong></p>
+    </div>
+  </header>
+
+  <section class="dl3dv-strip" aria-label="DL3DV zero-shot results">
+    <div class="container">
+      <div class="dl3dv-carousel">
+        <button class="carousel-button prev" type="button" data-carousel-target="dl3dv-gallery" data-carousel-dir="-1" aria-label="Previous DL3DV result">&#8249;</button>
+        <div class="scroll-gallery" id="dl3dv-gallery">
+          <div class="scroll-card"><video autoplay muted loop playsinline controls src="./static/videos_raw/0a485.mp4"></video></div>
+          <div class="scroll-card"><video autoplay muted loop playsinline controls src="./static/videos_raw/5c3af.mp4"></video></div>
+          <div class="scroll-card"><video autoplay muted loop playsinline controls src="./static/videos_raw/032de.mp4"></video></div>
+          <div class="scroll-card"><video autoplay muted loop playsinline controls src="./static/videos_raw/093ef.mp4"></video></div>
+          <div class="scroll-card"><video autoplay muted loop playsinline controls src="./static/videos_raw/374ff.mp4"></video></div>
+          <div class="scroll-card"><video autoplay muted loop playsinline controls src="./static/videos_raw/c0769.mp4"></video></div>
+          <div class="scroll-card"><video autoplay muted loop playsinline controls src="./static/videos_raw/ef59a.mp4"></video></div>
+        </div>
+        <button class="carousel-button next" type="button" data-carousel-target="dl3dv-gallery" data-carousel-dir="1" aria-label="Next DL3DV result">&#8250;</button>
+        <div class="dl3dv-pagination" id="dl3dv-pagination" aria-label="DL3DV carousel pagination"></div>
+      </div>
+      <p class="dl3dv-caption">Rendering results on the DL3DV-140 dataset using 32 input images with a resolution of 540×960.<br>Click a video to open the interactive player with pause and timeline controls.</p>
+    </div>
+  </section>
+
+  <div class="video-lightbox" id="dl3dv-video-lightbox" aria-hidden="true" role="dialog" aria-label="DL3DV enlarged video preview">
+    <div class="video-lightbox-panel">
+      <button class="video-lightbox-close" type="button" aria-label="Close video preview">&times;</button>
+      <video id="dl3dv-lightbox-player" autoplay muted loop playsinline controls></video>
+    </div>
+  </div>
+
+  <div class="compare-lightbox" id="results-video-lightbox" aria-hidden="true" role="dialog" aria-label="Results video comparison player">
+    <div class="compare-lightbox-panel">
+      <button class="compare-lightbox-close" type="button" aria-label="Close results video player">&times;</button>
+      <div class="compare-canvas-wrap">
+        <video id="results-lightbox-source" muted playsinline></video>
+        <canvas id="results-lightbox-canvas"></canvas>
+      </div>
+      <div class="compare-controls">
+        <button class="compare-play-button" id="results-lightbox-play" type="button" aria-label="Play video"><i class="fas fa-play"></i></button>
+        <span class="compare-time" id="results-lightbox-current">0:00</span>
+        <input class="compare-seek" id="results-lightbox-seek" type="range" min="0" max="0" value="0" step="0.01" aria-label="Seek video">
+        <span class="compare-time" id="results-lightbox-duration">0:00</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="abstract" class="intro">
+    <div class="container">
+      <h2>Abstract</h2>
+      <p class="abstract-text">
+        AsySplat is an efficient asymmetric 3D Gaussian Splatting framework for <strong>long-sequence novel view synthesis</strong>. Recent generalizable 3DGS models advance long-sequence NVS, but often incur <strong>substantial redundant computation</strong>. We identify two key observations: <strong>high-precision geometry is not strictly required</strong> for high-quality NVS, and <strong>appearance learning is generally easier than geometry recovery</strong>. Motivated by these insights, AsySplat decouples geometry and appearance modeling: a geometry branch processes <strong>coarse-grained tokens</strong> with most parameters for multi-view reconstruction, while an appearance branch operates on <strong>fine-grained tokens</strong> with significantly fewer parameters to preserve visual details. The two branches interact through <strong>bilateral connections</strong>, enabling mutual guidance and more judicious computation allocation. On 32-view 960P inputs, AsySplat surpasses previous generalizable models with <strong>markedly fewer parameters</strong> and reduced training/inference overhead.
+      </p>
+    </div>
+  </section>
+
+  <section id="method" class="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Methodology</h2>
+      </div>
+      <div class="diagram-container">
+        <div class="diagram-mosaic">
+          <div class="diagram-panel figure-1">
+            <div class="diagram-figure">
+              <img src="./static/images/framework.png" alt="AsySplat framework">
+            </div>
+            <p class="diagram-note">Figure 2: The AsySplat framework architecture.</p>
+          </div>
+          <div class="diagram-panel figure-2">
+            <div class="diagram-figure">
+              <img src="./static/images/observations.png" alt="AsySplat motivation">
+            </div>
+            <p class="diagram-note">Figure 1: Two observations that lead to the computation reallocation design of AsySplat.</p>
+          </div>
+          <div class="diagram-panel figure-3">
+            <div class="diagram-figure">
+              <img src="./static/images/sparse.png" alt="AsySplat sparse attention">
+            </div>
+            <p class="diagram-note">Figure 3: The sparse attention module for training/inference overhead reduction.</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="card-title">
+            <span class="card-index">1</span>
+            <h4>Observations 🧐</h4>
+          </div>
+          <p>(i) High-precision geometry is <strong>not a must</strong> for high-quality rendering. (ii) Once geometry is estimated, high-precision appearance attributes are <strong>easy to model</strong> by assigning pixel-aligned RGB evidence to Gaussians.</p>
+        </article>
+        <article class="card">
+          <div class="card-title">
+            <span class="card-index">2</span>
+            <h4>AsySplat Framework 🔥</h4>
+          </div>
+          <p>AsySplat reallocates computation by <strong>decoupling</strong> the modeling of geometry and appearance into two branches, aligning each with its precision needs and learning difficulty. <strong>Asymmetry across branches: token granularities, computation, and parameters.</strong></p>
+        </article>
+        <article class="card">
+          <div class="card-title">
+            <span class="card-index">3</span>
+            <h4>Sparse Attention 🚄</h4>
+          </div>
+          <p>The proposed sparse attention module combines convolution blocks with self attention to reduce computation overhead while preserving context. The <strong>training time is significantly shortened</strong> by using the module.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="results" class="showcase">
+    <div class="container">
+      <div class="section-header">
+        <h2>Comparisons Showcase</h2>
+        <p class="showcase-note">Please note that, in the comparisons below, our method demonstrates both stronger performance and <strong>comprehensive overhead reduction</strong>, including lower training cost, inference cost, and parameter count. 
+          Except for the comparisons on the Replica dataset, which use 32 input views at 540×744 resolution, comparisons on other datasets are conducted with 32 input views at a 540×960 resolution.
+          <br> 
+          🤝 Drag the slider to compare methods, or click a video to open the interactive player with pause and timeline controls.
+        </p>
+      </div>
+
+      <article class="showcase-item">
+        <div class="desc-box">
+          <h3>Zero-Shot Results - Trajectory</h3>
+          <p>The videos below provide comparisons on the MipNeRF-360 and Replica datasets. </p>
+        </div>
+        <div class="gallery-wrapper">
+          <div class="comparison-stage" id="trajectory-stage"></div>
+          <div class="choice-strip" data-gallery="trajectory-stage">
+            <button class="choice-card active" data-kind="video" data-id="traj_stump" data-src="./static/videos_compressed/stump_h264.mp4">Stump</button>
+            <button class="choice-card" data-kind="video" data-id="traj_bonsai" data-src="./static/videos_compressed/bonsai_h264.mp4">Bonsai</button>
+            <button class="choice-card" data-kind="video" data-id="traj_garden" data-src="./static/videos_compressed/garden_h264.mp4">Garden</button>
+            <button class="choice-card" data-kind="video" data-id="traj_counter" data-src="./static/videos_compressed/counter_h264.mp4">Counter</button>
+            <button class="choice-card" data-kind="video" data-id="traj_room0" data-stage-width="480" data-src="./static/videos_compressed/room0_h264.mp4">Room 0</button>
+            <button class="choice-card" data-kind="video" data-id="traj_room1" data-stage-width="480" data-src="./static/videos_compressed/room1_h264.mp4">Room 1</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="showcase-item">
+        <div class="desc-box">
+          <h3>Zero-Shot Results - Novel View Synthesis</h3>
+          <p>The images below provide comparisons on the Tanks&Temples, Deep Blending, and MipNeRF-360 datasets. </p>
+        </div>
+        <div class="gallery-wrapper">
+          <div class="comparison-stage image-stage" id="novel-stage"></div>
+          <div class="choice-strip" data-gallery="novel-stage">
+            <button class="choice-card active" data-kind="image" data-stage-width="980" data-before="./static/images/imgs_split/truck_llrm.png" data-after="./static/images/imgs_split/truck_asy.png" data-before2="./static/images/imgs_split/truck2_llrm.png" data-after2="./static/images/imgs_split/truck2_asy.png">Truck</button>
+            <button class="choice-card" data-kind="image" data-stage-width="980" data-before="./static/images/imgs_split/train_llrm.png" data-after="./static/images/imgs_split/train_asy.png" data-before2="./static/images/imgs_split/train2_llrm.png" data-after2="./static/images/imgs_split/train2_asy.png">Train</button>
+            <button class="choice-card" data-kind="image" data-stage-width="980" data-before="./static/images/imgs_split/playroom_llrm.png" data-after="./static/images/imgs_split/playroom_asy.png" data-before2="./static/images/imgs_split/playroom2_llrm.png" data-after2="./static/images/imgs_split/playroom2_asy.png">Playroom</button>
+            <button class="choice-card" data-kind="image" data-stage-width="980" data-before="./static/images/imgs_split/bicycle_llrm.png" data-after="./static/images/imgs_split/bicycle_asy.png" data-before2="./static/images/imgs_split/bicycle2_llrm.png" data-after2="./static/images/imgs_split/bicycle2_asy.png">Bicycle</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="showcase-item">
+        <div class="desc-box">
+          <h3>In-Domain Results</h3>
+          <p>We provide comparisons on the DL3DV-140 dataset. Although two methods achieve close metric on this dataset (<strong>with AsySplat showing significantly lower overhead</strong>), AsySplat shows advantages <strong>visually, especially in preserving fine details</strong>.</p>
+        </div>
+        <div class="gallery-wrapper">
+          <div class="indomain-block">
+            <!-- <h4 class="indomain-column-title">Novel View Synthesis</h4> -->
+            <div class="comparison-stage image-stage dual-image-stage indomain-nvs-stage">
+              <div class="image-compare-panel">
+                <img-comparison-slider hover="hover">
+                  <img slot="first" src="./static/images/indomain_nvs/0a485_14_before.jpg" alt="Baseline novel-view result">
+                  <img slot="second" src="./static/images/indomain_nvs/0a485_14_after.jpg" alt="AsySplat novel-view result">
+                </img-comparison-slider>
+              </div>
+              <div class="image-compare-panel">
+                <img-comparison-slider hover="hover">
+                  <img slot="first" src="./static/images/indomain_nvs/0a485_20_before.jpg" alt="Baseline novel-view result">
+                  <img slot="second" src="./static/images/indomain_nvs/0a485_20_after.jpg" alt="AsySplat novel-view result">
+                </img-comparison-slider>
+              </div>
+            </div>
+          </div>
+          <div class="indomain-selector-block">
+            <div class="choice-strip thumbnail-choice-strip indomain-scene-strip" data-gallery="text-stage">
+              <button class="choice-card thumbnail-choice active" data-kind="video" data-id="text_0a485" data-src="./static/videos_compressed/0a485_h264_compressed.mp4" data-nvs1-before="./static/images/indomain_nvs/0a485_14_before.jpg" data-nvs1-after="./static/images/indomain_nvs/0a485_14_after.jpg" data-nvs2-before="./static/images/indomain_nvs/0a485_20_before.jpg" data-nvs2-after="./static/images/indomain_nvs/0a485_20_after.jpg" aria-label="Select text-to-4D example 1"><img src="./static/images/text4d_thumbs/0a485.jpg" alt=""></button>
+              <button class="choice-card thumbnail-choice" data-kind="video" data-id="text_c0769" data-src="./static/videos_compressed/c0769_h264_compressed.mp4" data-nvs1-before="./static/images/indomain_nvs/c0769_15_before.jpg" data-nvs1-after="./static/images/indomain_nvs/c0769_15_after.jpg" data-nvs2-before="./static/images/indomain_nvs/c0769_22_before.jpg" data-nvs2-after="./static/images/indomain_nvs/c0769_22_after.jpg" aria-label="Select text-to-4D example 7"><img src="./static/images/text4d_thumbs/c0769.jpg" alt=""></button>
+              <button class="choice-card thumbnail-choice" data-kind="video" data-id="text_0569e" data-src="./static/videos_compressed/0569e_h264_compressed.mp4" data-nvs1-before="./static/images/indomain_nvs/0569e_6_before.jpg" data-nvs1-after="./static/images/indomain_nvs/0569e_6_after.jpg" data-nvs2-before="./static/images/indomain_nvs/0569e_24_before.jpg" data-nvs2-after="./static/images/indomain_nvs/0569e_24_after.jpg" aria-label="Select text-to-4D example 6"><img src="./static/images/text4d_thumbs/0569e.jpg" alt=""></button>
+              <button class="choice-card thumbnail-choice" data-kind="video" data-id="text_5c3af" data-src="./static/videos_compressed/5c3af_h264_compressed.mp4" data-nvs1-before="./static/images/indomain_nvs/5c3af_9_before.jpg" data-nvs1-after="./static/images/indomain_nvs/5c3af_9_after.jpg" data-nvs2-before="./static/images/indomain_nvs/5c3af_19_before.jpg" data-nvs2-after="./static/images/indomain_nvs/5c3af_19_after.jpg" aria-label="Select text-to-4D example 2"><img src="./static/images/text4d_thumbs/5c3af.jpg" alt=""></button>
+              <button class="choice-card thumbnail-choice" data-kind="video" data-id="text_093ef" data-src="./static/videos_compressed/093ef_h264_compressed.mp4" data-nvs1-before="./static/images/indomain_nvs/093ef_20_before.jpg" data-nvs1-after="./static/images/indomain_nvs/093ef_20_after.jpg" data-nvs2-before="./static/images/indomain_nvs/093ef_21_before.jpg" data-nvs2-after="./static/images/indomain_nvs/093ef_21_after.jpg" aria-label="Select text-to-4D example 4"><img src="./static/images/text4d_thumbs/093ef.jpg" alt=""></button>
+              <button class="choice-card thumbnail-choice" data-kind="video" data-id="text_ef59a" data-src="./static/videos_compressed/ef59a_h264_compressed.mp4" data-nvs1-before="./static/images/indomain_nvs/ef59a_12_before.jpg" data-nvs1-after="./static/images/indomain_nvs/ef59a_12_after.jpg" data-nvs2-before="./static/images/indomain_nvs/ef59a_25_before.jpg" data-nvs2-after="./static/images/indomain_nvs/ef59a_25_after.jpg" aria-label="Select text-to-4D example 8"><img src="./static/images/text4d_thumbs/ef59a.jpg" alt=""></button>
+            </div>
+          </div>
+          
+          <div class="indomain-block">
+            <!-- <h4 class="indomain-column-title">Trajectory</h4> -->
+            <div class="comparison-stage" id="text-stage"></div>
+          </div>
+         
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="bibtex" class="bibtex-section">
+    <div class="container">
+      <h3>BibTeX</h3>
+      <pre><code>@inproceedings{
+}</code></pre>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">AsySplat</div>
+        <div class="footer-links">
+          <a href="https://hkust.edu.hk/">HKUST</a>
+          <a href="https://www.danxurgb.net/">Lab Page</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function renderVideoComparison(stage, button) {
+      var videoId = button.dataset.id;
+      stage.classList.remove("image-stage");
+      stage.classList.remove("dual-image-stage");
+      stage.style.maxWidth = button.dataset.stageWidth ? button.dataset.stageWidth + "px" : "";
+      stage.innerHTML =
+        '<div class="video-compare-container">' +
+        '<video class="video" id="' + videoId + '" loop playsinline autoplay muted src="' + button.dataset.src + '"></video>' +
+        '<canvas class="videoMerge" id="' + videoId + 'Merge"></canvas>' +
+        '</div>';
+
+      var video = document.getElementById(videoId);
+      var container = stage.querySelector(".video-compare-container");
+      var initialized = false;
+      function initializeComparison() {
+        if (initialized || !video.videoWidth || video.readyState < 2) {
+          return;
+        }
+        initialized = true;
+        resizeAndPlay(video);
+      }
+      video.addEventListener("loadeddata", initializeComparison, { once: true });
+      video.addEventListener("canplay", initializeComparison, { once: true });
+      video.addEventListener("playing", initializeComparison, { once: true });
+      window.setTimeout(initializeComparison, 700);
+      video.play().catch(function () {});
+
+      var clickStart = null;
+      container.addEventListener("pointerdown", function (event) {
+        clickStart = { x: event.clientX, y: event.clientY };
+      });
+      container.addEventListener("pointerup", function (event) {
+        if (!clickStart) {
+          return;
+        }
+        var moved = Math.abs(event.clientX - clickStart.x) + Math.abs(event.clientY - clickStart.y);
+        clickStart = null;
+        if (moved < 8) {
+          openResultsVideoLightbox(video.getAttribute("src"), video.currentTime || 0);
+        }
+      });
+    }
+
+    function renderImageComparison(stage, button) {
+      stage.classList.add("image-stage");
+      stage.classList.toggle("dual-image-stage", !!button.dataset.before2);
+      stage.style.maxWidth = button.dataset.stageWidth ? button.dataset.stageWidth + "px" : "";
+
+      var firstSlider =
+        '<div class="image-compare-panel">' +
+        '<img-comparison-slider hover="hover">' +
+        '<img slot="first" src="' + button.dataset.before + '" alt="Baseline result">' +
+        '<img slot="second" src="' + button.dataset.after + '" alt="AsySplat result">' +
+        '</img-comparison-slider>' +
+        '</div>';
+
+      if (!button.dataset.before2) {
+        stage.innerHTML = firstSlider;
+        return;
+      }
+
+      var secondSlider =
+        '<div class="image-compare-panel">' +
+        '<img-comparison-slider hover="hover">' +
+        '<img slot="first" src="' + button.dataset.before2 + '" alt="Baseline result">' +
+        '<img slot="second" src="' + button.dataset.after2 + '" alt="AsySplat result">' +
+        '</img-comparison-slider>' +
+        '</div>';
+
+      stage.innerHTML = firstSlider + secondSlider;
+    }
+
+    function renderIndomainNvs(button) {
+      var stage = document.querySelector(".indomain-nvs-stage");
+      if (!stage || !button.dataset.nvs1Before || !button.dataset.nvs2Before) {
+        return;
+      }
+
+      stage.innerHTML =
+        '<div class="image-compare-panel">' +
+        '<img-comparison-slider hover="hover">' +
+        '<img slot="first" src="' + button.dataset.nvs1Before + '" alt="Baseline novel-view result">' +
+        '<img slot="second" src="' + button.dataset.nvs1After + '" alt="AsySplat novel-view result">' +
+        '</img-comparison-slider>' +
+        '</div>' +
+        '<div class="image-compare-panel">' +
+        '<img-comparison-slider hover="hover">' +
+        '<img slot="first" src="' + button.dataset.nvs2Before + '" alt="Baseline novel-view result">' +
+        '<img slot="second" src="' + button.dataset.nvs2After + '" alt="AsySplat novel-view result">' +
+        '</img-comparison-slider>' +
+        '</div>';
+    }
+
+    var resultsLightbox = document.getElementById("results-video-lightbox");
+    var resultsSource = document.getElementById("results-lightbox-source");
+    var resultsCanvas = document.getElementById("results-lightbox-canvas");
+    var resultsPlayButton = document.getElementById("results-lightbox-play");
+    var resultsSeek = document.getElementById("results-lightbox-seek");
+    var resultsCurrent = document.getElementById("results-lightbox-current");
+    var resultsDuration = document.getElementById("results-lightbox-duration");
+    var resultsClose = resultsLightbox.querySelector(".compare-lightbox-close");
+    var resultsComparePosition = 0.5;
+    var resultsSeekDragging = false;
+    var resultsDrawLoopActive = false;
+
+    function formatVideoTime(seconds) {
+      if (!Number.isFinite(seconds)) {
+        return "0:00";
+      }
+      var wholeSeconds = Math.max(0, Math.floor(seconds));
+      var minutes = Math.floor(wholeSeconds / 60);
+      var remainder = String(wholeSeconds % 60).padStart(2, "0");
+      return minutes + ":" + remainder;
+    }
+
+    function syncResultsPlayButton() {
+      var iconClass = resultsSource.paused ? "fas fa-play" : "fas fa-pause";
+      var label = resultsSource.paused ? "Play video" : "Pause video";
+      resultsPlayButton.innerHTML = '<i class="' + iconClass + '"></i>';
+      resultsPlayButton.setAttribute("aria-label", label);
+    }
+
+    function drawResultsComparisonFrame() {
+      if (!resultsLightbox.classList.contains("open")) {
+        resultsDrawLoopActive = false;
+        return;
+      }
+
+      if (resultsSource.videoWidth && resultsSource.videoHeight) {
+        var sourceWidth = resultsSource.videoWidth / 2;
+        var sourceHeight = resultsSource.videoHeight;
+        if (resultsCanvas.width !== sourceWidth || resultsCanvas.height !== sourceHeight) {
+          resultsCanvas.width = sourceWidth;
+          resultsCanvas.height = sourceHeight;
+        }
+
+        var context = resultsCanvas.getContext("2d");
+        context.drawImage(resultsSource, 0, 0, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight);
+        var splitX = Math.min(Math.max(sourceWidth * resultsComparePosition, 0), sourceWidth);
+        var rightWidth = sourceWidth - splitX;
+        context.drawImage(resultsSource, sourceWidth + splitX, 0, rightWidth, sourceHeight, splitX, 0, rightWidth, sourceHeight);
+
+        context.beginPath();
+        context.moveTo(splitX, 0);
+        context.lineTo(splitX, sourceHeight);
+        context.strokeStyle = "#ffffff";
+        context.lineWidth = 3;
+        context.stroke();
+
+        context.beginPath();
+        context.arc(splitX, sourceHeight * 0.11, sourceHeight * 0.045, 0, Math.PI * 2);
+        context.fillStyle = "rgba(255, 255, 255, 0.82)";
+        context.fill();
+      }
+
+      requestAnimationFrame(drawResultsComparisonFrame);
+    }
+
+    function updateResultsTimeDisplay() {
+      if (!resultsSeekDragging) {
+        resultsSeek.value = resultsSource.currentTime || 0;
+      }
+      resultsCurrent.textContent = formatVideoTime(resultsSource.currentTime);
+      resultsDuration.textContent = formatVideoTime(resultsSource.duration);
+    }
+
+    function openResultsVideoLightbox(src, startTime) {
+      resultsSource.pause();
+      resultsSource.removeAttribute("src");
+      resultsSource.load();
+      resultsSource.src = src;
+      resultsComparePosition = 0.5;
+      resultsLightbox.classList.add("open");
+      resultsLightbox.setAttribute("aria-hidden", "false");
+
+      resultsSource.addEventListener("loadedmetadata", function () {
+        resultsSeek.max = resultsSource.duration || 0;
+        resultsSource.currentTime = Math.min(startTime || 0, resultsSource.duration || 0);
+        updateResultsTimeDisplay();
+        resultsSource.play().catch(function () {});
+      }, { once: true });
+
+      if (!resultsDrawLoopActive) {
+        resultsDrawLoopActive = true;
+        requestAnimationFrame(drawResultsComparisonFrame);
+      }
+    }
+
+    function closeResultsVideoLightbox() {
+      resultsLightbox.classList.remove("open");
+      resultsLightbox.setAttribute("aria-hidden", "true");
+      resultsSource.pause();
+      resultsSource.removeAttribute("src");
+      resultsSource.load();
+      syncResultsPlayButton();
+    }
+
+    resultsCanvas.addEventListener("pointermove", function (event) {
+      var bounds = resultsCanvas.getBoundingClientRect();
+      resultsComparePosition = Math.min(Math.max((event.clientX - bounds.left) / bounds.width, 0), 1);
+    });
+    resultsCanvas.addEventListener("touchmove", function (event) {
+      if (!event.touches.length) {
+        return;
+      }
+      var bounds = resultsCanvas.getBoundingClientRect();
+      resultsComparePosition = Math.min(Math.max((event.touches[0].clientX - bounds.left) / bounds.width, 0), 1);
+      event.preventDefault();
+    }, { passive: false });
+    resultsPlayButton.addEventListener("click", function () {
+      if (resultsSource.paused) {
+        resultsSource.play().catch(function () {});
+      } else {
+        resultsSource.pause();
+      }
+      syncResultsPlayButton();
+    });
+    resultsSeek.addEventListener("input", function () {
+      resultsSeekDragging = true;
+      resultsSource.currentTime = Number(resultsSeek.value);
+      updateResultsTimeDisplay();
+    });
+    resultsSeek.addEventListener("change", function () {
+      resultsSeekDragging = false;
+      resultsSource.currentTime = Number(resultsSeek.value);
+      updateResultsTimeDisplay();
+    });
+    resultsSource.addEventListener("play", syncResultsPlayButton);
+    resultsSource.addEventListener("pause", syncResultsPlayButton);
+    resultsSource.addEventListener("timeupdate", updateResultsTimeDisplay);
+    resultsSource.addEventListener("durationchange", updateResultsTimeDisplay);
+    resultsClose.addEventListener("click", closeResultsVideoLightbox);
+    resultsLightbox.addEventListener("click", function (event) {
+      if (event.target === resultsLightbox) {
+        closeResultsVideoLightbox();
+      }
+    });
+
+    function activateChoice(button) {
+      var strip = button.closest(".choice-strip");
+      var stage = document.getElementById(strip.dataset.gallery);
+      strip.querySelectorAll(".choice-card").forEach(function (item) {
+        item.classList.toggle("active", item === button);
+      });
+
+      if (button.dataset.kind === "image") {
+        renderImageComparison(stage, button);
+      } else {
+        if (stage) {
+          renderVideoComparison(stage, button);
+        }
+        if (strip.dataset.gallery === "text-stage") {
+          renderIndomainNvs(button);
+        }
+      }
+    }
+
+    document.querySelectorAll(".choice-strip").forEach(function (strip) {
+      var first = strip.querySelector(".choice-card.active") || strip.querySelector(".choice-card");
+      if (first) {
+        activateChoice(first);
+      }
+      strip.addEventListener("click", function (event) {
+        var button = event.target.closest(".choice-card");
+        if (button) {
+          activateChoice(button);
+        }
+      });
+    });
+
+    document.querySelectorAll(".carousel-button").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var gallery = document.getElementById(button.dataset.carouselTarget);
+        var direction = Number(button.dataset.carouselDir || 1);
+        if (!gallery) {
+          return;
+        }
+        gallery.scrollBy({
+          left: direction * gallery.clientWidth * 0.82,
+          behavior: "smooth"
+        });
+      });
+    });
+
+    var dl3dvGallery = document.getElementById("dl3dv-gallery");
+    var dl3dvPagination = document.getElementById("dl3dv-pagination");
+
+    if (dl3dvGallery && dl3dvPagination) {
+      var dl3dvCards = Array.from(dl3dvGallery.querySelectorAll(".scroll-card"));
+      var dl3dvDots = [];
+      var dl3dvScrollFrame = null;
+
+      function setDl3dvActiveDot(index) {
+        dl3dvDots.forEach(function (dot, dotIndex) {
+          dot.classList.toggle("active", dotIndex === index);
+          dot.setAttribute("aria-current", dotIndex === index ? "true" : "false");
+        });
+      }
+
+      function getDl3dvActiveIndex() {
+        var galleryCenter = dl3dvGallery.scrollLeft + dl3dvGallery.clientWidth / 2;
+        var bestIndex = 0;
+        var bestDistance = Infinity;
+
+        dl3dvCards.forEach(function (card, index) {
+          var cardCenter = card.offsetLeft + card.offsetWidth / 2;
+          var distance = Math.abs(cardCenter - galleryCenter);
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            bestIndex = index;
+          }
+        });
+
+        return bestIndex;
+      }
+
+      function syncDl3dvDots() {
+        setDl3dvActiveDot(getDl3dvActiveIndex());
+      }
+
+      dl3dvCards.forEach(function (card, index) {
+        var dot = document.createElement("button");
+        dot.className = "dl3dv-dot";
+        dot.type = "button";
+        dot.setAttribute("aria-label", "Go to DL3DV result " + (index + 1));
+        dot.addEventListener("click", function () {
+          card.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center"
+          });
+          setDl3dvActiveDot(index);
+        });
+        dl3dvPagination.appendChild(dot);
+        dl3dvDots.push(dot);
+      });
+
+      dl3dvGallery.addEventListener("scroll", function () {
+        if (dl3dvScrollFrame) {
+          cancelAnimationFrame(dl3dvScrollFrame);
+        }
+        dl3dvScrollFrame = requestAnimationFrame(syncDl3dvDots);
+      }, { passive: true });
+
+      window.addEventListener("resize", syncDl3dvDots);
+      syncDl3dvDots();
+    }
+
+    var dl3dvLightbox = document.getElementById("dl3dv-video-lightbox");
+    var dl3dvLightboxPlayer = document.getElementById("dl3dv-lightbox-player");
+    var dl3dvLightboxClose = dl3dvLightbox.querySelector(".video-lightbox-close");
+
+    function closeDl3dvLightbox() {
+      dl3dvLightbox.classList.remove("open");
+      dl3dvLightbox.setAttribute("aria-hidden", "true");
+      dl3dvLightboxPlayer.pause();
+      dl3dvLightboxPlayer.removeAttribute("src");
+      dl3dvLightboxPlayer.load();
+    }
+
+    document.querySelectorAll("#dl3dv-gallery .scroll-card").forEach(function (card) {
+      card.addEventListener("click", function () {
+        var sourceVideo = card.querySelector("video");
+        if (!sourceVideo) {
+          return;
+        }
+        var startTime = sourceVideo.currentTime || 0;
+        dl3dvLightboxPlayer.src = sourceVideo.currentSrc || sourceVideo.getAttribute("src");
+        dl3dvLightboxPlayer.addEventListener("loadedmetadata", function () {
+          dl3dvLightboxPlayer.currentTime = startTime;
+        }, { once: true });
+        dl3dvLightbox.classList.add("open");
+        dl3dvLightbox.setAttribute("aria-hidden", "false");
+        dl3dvLightboxPlayer.play().catch(function () {});
+      });
+    });
+
+    dl3dvLightboxClose.addEventListener("click", closeDl3dvLightbox);
+    dl3dvLightbox.addEventListener("click", function (event) {
+      if (event.target === dl3dvLightbox) {
+        closeDl3dvLightbox();
+      }
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && dl3dvLightbox.classList.contains("open")) {
+        closeDl3dvLightbox();
+      }
+      if (event.key === "Escape" && resultsLightbox.classList.contains("open")) {
+        closeResultsVideoLightbox();
+      }
+    });
+  </script>
+</body>
+</html>
