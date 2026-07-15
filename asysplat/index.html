@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="AsySplat: Efficient Asymmetric 3D Gaussian Splatting for Long-Sequence Scene Modeling">
-  <meta name="keywords" content="AsySplat, 3D Gaussian Splatting, Long-Sequence Reconstruction">
+  <meta name="description" content="AsySplat: Efficient Asymmetric 3D Gaussian Splatting for Wide-Coverage Scene Modeling">
+  <meta name="keywords" content="AsySplat, 3D Gaussian Splatting, Wide-Coverage Reconstruction">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AsySplat</title>
 
@@ -1005,7 +1005,7 @@
   <header class="hero">
     <div class="hero-content">
       <h1>AsySplat</h1>
-      <p class="subtitle">Efficient Asymmetric 3D Gaussian Splatting for Long-Sequence Scene Modeling</p>
+      <p class="subtitle">Efficient Asymmetric 3D Gaussian Splatting for Wide-Coverage Scene Modeling</p>
       <div class="authors">
         <a class="author-name" href="https://zhongyingji.github.io/" target="_blank" rel="noopener noreferrer">Yingji Zhong<sup>1</sup></a>,
         <a class="author-name" href="https://daveredrum.github.io/" target="_blank" rel="noopener noreferrer">Dave Zhenyu Chen<sup>2</sup></a>,
@@ -1084,7 +1084,7 @@
     <div class="container">
       <h2>Abstract</h2>
       <p class="abstract-text">
-        AsySplat is an efficient asymmetric 3D Gaussian Splatting framework for <strong>long-sequence novel view synthesis</strong>. Recent generalizable 3DGS models advance long-sequence NVS, but often incur <strong>substantial redundant computation</strong>. We identify two key observations: <strong>high-precision geometry is not strictly required</strong> for high-quality NVS, and <strong>appearance learning is generally easier than geometry recovery</strong>. Motivated by these insights, AsySplat decouples geometry and appearance modeling: a geometry branch processes <strong>coarse-grained tokens</strong> with most parameters for multi-view reconstruction, while an appearance branch operates on <strong>fine-grained tokens</strong> with significantly fewer parameters to preserve visual details. The two branches interact through <strong>bilateral connections</strong>, enabling mutual guidance and more judicious computation allocation. On 32-view 960P inputs, AsySplat surpasses previous generalizable models with <strong>markedly fewer parameters</strong> and reduced training/inference overhead.
+        AsySplat is an efficient asymmetric 3D Gaussian Splatting framework for <strong>wide-coverage novel view synthesis</strong>. Recent generalizable 3DGS models advance wide-coverage NVS, but often incur <strong>substantial redundant computation</strong>. We identify two key observations: <strong>high-precision geometry is not strictly required</strong> for high-quality NVS, and <strong>appearance learning is generally easier than geometry recovery</strong>. Motivated by these insights, AsySplat decouples geometry and appearance modeling: a geometry branch processes <strong>coarse-grained tokens</strong> with most parameters for multi-view reconstruction, while an appearance branch operates on <strong>fine-grained tokens</strong> with significantly fewer parameters to preserve visual details. The two branches interact through <strong>bilateral connections</strong>, enabling mutual guidance and more judicious computation allocation. On 32-view 960P inputs, AsySplat surpasses previous generalizable models with <strong>markedly fewer parameters</strong> and reduced training/inference overhead.
       </p>
     </div>
   </section>
